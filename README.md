@@ -1,26 +1,27 @@
-<div align="center">
-  <img width="200" height="200"
-    src="https://cdn.worldvectorlogo.com/logos/circleci.svg">
-  <a href="https://github.com/easymetrics">
-    <img width="200" height="200" vspace="" hspace="25"
-      src="https://cdn.worldvectorlogo.com/logos/webpack-icon.svg">
-  </a>
-  <h1>CircleCI 2.0 JRE (JDK 7) / NodeJS 8 LTS build container</h1>
-</div>
+# svls/serverless
 
-<h2 align="center">Usage</h2>
+Run serverless deploy, dynamodb-local, serverless offline plugin and unit test in docker container.
+
+## Usage
 
 ```bash
-# config.yml
-    docker:
-      - image: kalote/circleci-node8-jre
+# build, tag, push image to docker hub, update git tag with latest serverless release (one-time task)
+$ make release
+
+# Run serverless deploy in the image.
+$ docker pull svls/serverless:1.24.1
+$ docker run --rm -it -v $(pwd):/opt/app -v ~/.aws:/root/.aws -v ~/.ssh:/root/.ssh svls/serverless:1.24.1 bash
+bash-4.3# sls plugin install -n serverless-dynamodb-local
+bash-4.3# sls plugin install -n serverless-offline
+bash-4.3# sls dynamodb install
+bash-4.3# sls offline start -r us-east-2 --noTimeout --corsDisallowCredentials false &
+bash-4.3# npm run test
 ```
 
-<h2 align="center">Container Includes</h2>
+## Docker image
 
-- CircleCI specific dependencies & runtime user configuration.
-- NodeJS version 8 LTS
-- serverless / mocha / babel global nodejs packages
-- JRE (JDK 7)
+The Docker image has the following:
 
-> This container does not have a headless browser configuration
+- Node 8: we leverage Babel to be compatible with AWS Lambda runtime
+- [Serverless Framework](https://serverless.com)
+- jre 7: required by serverless plugins

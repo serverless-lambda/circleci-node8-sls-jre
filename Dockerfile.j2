@@ -1,0 +1,19 @@
+FROM circleci/node:8
+
+USER root
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV SERVERLESS serverless@{{ version }}
+
+RUN apt-get update \
+    && apt-get install -y default-jre
+
+RUN npm install -g ${SERVERLESS}  mocha babel-cli
+
+USER circleci
+
+EXPOSE 3000 8000
+
+WORKDIR /opt/app
+
+CMD [ "serverless" ]
