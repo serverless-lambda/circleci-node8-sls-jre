@@ -5,7 +5,7 @@ Run serverless deploy, dynamodb-local, serverless offline plugin and unit test i
 ## Usage
 
 ```bash
-# build, tag, push image to docker hub, update git tag with latest serverless release (one-time task)
+# build, tag, push image to docker hub, update git tag with latest serverless release (one-time task for each new serverless release)
 $ make release
 
 # Run serverless deploy in the image.
