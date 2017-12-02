@@ -13,13 +13,15 @@ $ make release
 $ docker pull svls/serverless:1.24.1
 $ docker run --rm -it -v $(pwd):/opt/app -v ~/.aws:/root/.aws -v ~/.ssh:/root/.ssh svls/serverless:1.24.1 deploy
 
-# Run serverless unit test
-$ docker run --rm -it -v $(pwd):/opt/app -v ~/.aws:/root/.aws -v ~/.ssh:/root/.ssh svls/serverless:1.24.1 bash
-bash-4.3# sls plugin install -n serverless-dynamodb-local
-bash-4.3# sls plugin install -n serverless-offline
-bash-4.3# sls dynamodb install
-bash-4.3# sls offline start -r us-east-2 --noTimeout --corsDisallowCredentials false &
-bash-4.3# npm run test
+# Run serverless unit test locally
+$ docker run --rm -it -v $(pwd):/opt/app svls/serverless:1.24.1 bash
+circleci@eba227feccb7:/opt/app$ sls config credentials --provider aws --key KEY --secret SECRET
+circleci@eba227feccb7:/opt/app$ npm install
+circleci@eba227feccb7:/opt/app$ sls plugin install -n serverless-dynamodb-local
+circleci@eba227feccb7:/opt/app$ sls plugin install -n serverless-offline
+circleci@eba227feccb7:/opt/app$ sls dynamodb install
+circleci@eba227feccb7:/opt/app$ sls offline start -r us-east-2 --noTimeout --corsDisallowCredentials false &
+circleci@eba227feccb7:/opt/app$ npm run test
 ```
 
 ## Docker image
